@@ -40,3 +40,16 @@
 archivo principal de ejecucion en py
 archivos secundarios del proyecto
 archivos txt json y csv
+
+
+****** correcciones
+
+
+Separar las funciones por archivos
+guardas los productos en csv
+datos persistentes
+
+
+
+
+

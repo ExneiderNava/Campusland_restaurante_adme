@@ -1,0 +1,2 @@
+def generarReporte():
+    return
