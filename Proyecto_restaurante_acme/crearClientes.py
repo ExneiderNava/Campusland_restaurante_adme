@@ -1,5 +1,9 @@
+import json
+
+
 def crearClientes():
-    print("====================")
+    decoracion = "=" * 50
+    print(decoracion)
     print("Modulo de Crear Clientes")
     try:
         identificaion = int(input("Ingrese el numero de identificacion: "))
@@ -17,6 +21,8 @@ def crearClientes():
         "Email" : email
     }
     
-    clientes[identificaion] = datos_cliente
+    with open("Clientes.json", "w") as archivo:
+        json.dump(datos_cliente, archivo)
+    
         
-    print("====================")
+    print(decoracion)
