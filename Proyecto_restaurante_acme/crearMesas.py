@@ -1,5 +1,9 @@
+import json
+
+
 def crearMesas():
-    print("==================")
+    decoracion = "=" * 50
+    print(decoracion)
     print("Modulo de crear mesas")
     
     try:
@@ -17,6 +21,9 @@ def crearMesas():
         "Puestos" : puestos
     }
     
-    mesas[codigo] = datos_mesas
+    with open("Mesas.json", "w") as archivo:
+        json.dump(datos_mesas, archivo)
+    
+
         
-    print("==================")   
+    print(decoracion)   
