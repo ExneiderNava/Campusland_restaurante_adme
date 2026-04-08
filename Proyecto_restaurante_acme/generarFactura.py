@@ -1,8 +1,10 @@
 from datetime import datetime
 import json
 
+decoracion = "=" * 50
+
 def generarFactura():
-    decoracion = "=" * 50
+    
     print(decoracion)
     
     #Ya tenemos los datos de la mesa
@@ -52,8 +54,7 @@ def generarFactura():
             if producto_encontrado:
                 cantidad = int(input(f"Ingrese la cantidad que desea de {producto_encontrado["Nombre"]} : "))
                 
-                datos_producto = {
-                    "codigo": productos_elegidos, 
+                datos_producto = { 
                     "Nombre": producto_encontrado["Nombre"], 
                     "Valor Unitario": producto_encontrado["Valor Unitario"], 
                     "Iva": producto_encontrado["Iva"],
@@ -72,9 +73,11 @@ def generarFactura():
 
         if continuar == 2:
             #se genera la factura
+            generarfactura(datos_mesa, datos_cliente, fecha_formateada, productos_a_facturar)
             
         if continuar != 1 and continuar != 2:
             #debemos combatir este error no dejar que haga error si el usuairo no elije ninguna de las 2
+            print("Opción invalida")
         
     
     print(decoracion)
@@ -91,4 +94,74 @@ def buscar_datos_jason(nombre_archivo, clave, valor):
         
     except Exception:
         print("Ha ocurrido un error :(")
+        
+def generarfactura(mesa, cliente, fecha, productos):
+    
+    print(decoracion)
+    print("FACTURA")
+    print(f"Cliente : {cliente["Nombre"]}")
+    print(f"Mesa: {mesa["Codigo"]} -> {mesa["Nombre"]} de {mesa["Puestos"]} puestos")
+    print(f"Fecha : {fecha}")
+    
+    total_a_pagar = 0
+    
+    print(f"Productos solicitados")
+    print(decoracion)
+    for codigo, info_producto in productos.items():
+        
+        subtotal = ((int(info_producto["Valor Unitario"]) + int(info_producto["Iva"])) * info_producto["Cantidad"])
+        
+        print(f"{info_producto["Nombre"]} : {info_producto["Cantidad"]} unidades | Total = {subtotal}")
+        
+        total_a_pagar += subtotal
+        
+    print(decoracion)
+    
+    
+   
+    print(f"Total a pagar : {total_a_pagar}")
+    
+    print(decoracion)
+    
+    print("¿Desea guardar la factura?")
+    print("1. Si")
+    print("2. No")
+    guardar_factura = int(input("Ingrese una opción: "))
+    
+    if guardar_factura == 1:
+        
+        nombre_archivo = f"Factura para {cliente["Nombre"]}.txt"
+        #Guardarlo como archivo txt
+        with open(nombre_archivo, "w") as factura:
+            
+            factura.write(decoracion + "\n")
+            factura.write("FACTURA DE VENTA \n")
+            factura.write(decoracion + "\n")
+            factura.write(f"Fecha : {fecha}\n")
+            factura.write(f"Cliente : {cliente['Nombre']} Nº {cliente['Identificaion']}\n")
+            factura.write(f"Numero de contacto : {cliente['Telefono']}")
+            factura.write(f"Email : {cliente['Email']}")
+            factura.write(f"Mesa : {mesa['Nombre']} Nº {mesa['Codigo']}\n")
+            factura.write(decoracion + "\n")
+            factura.write("PRODUCTOS\n")
+            
+            total_a_paga_txt = 0
+            
+            for codigo, info_producto in productos.items():
+        
+                subtotal = ((int(info_producto["Valor Unitario"]) + int(info_producto["Iva"])) * info_producto["Cantidad"])
+                
+                factura.write(f"{info_producto["Nombre"]} : {info_producto["Cantidad"]} unidades \n valor unitario : {info_producto["Valor Unitario"]}\n Iva : {info_producto["Iva"]} \n Total = {subtotal}\n")
+                
+                total_a_paga_txt += 0
+                
+            factura.write(f"Total a pagar = {total_a_paga_txt}")
+            factura.write(decoracion + "\n")
+        
+    if guardar_factura == 2:
+        #Imprimir subtotal de nuevo
+        print("Ok haz elegido no guardar la factura")
+        print(f"El total a pagar es: {total_a_pagar}")
+    
+    
     
