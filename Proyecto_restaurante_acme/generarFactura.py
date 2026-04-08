@@ -9,7 +9,7 @@ def generarFactura():
     
     #Ya tenemos los datos de la mesa
     
-    codigo_mesa = input("Ingrese el codigo de la mesa a atender: ")
+    codigo_mesa = int(input("Ingrese el codigo de la mesa a atender: "))
     datos_mesa = buscar_datos_jason("Mesas.json", "Codigo", codigo_mesa)
     
     if not datos_mesa:
@@ -29,7 +29,7 @@ def generarFactura():
     
     #ya tenemos la fecha actual formateada
     
-    fecha_actual = datetime.datetime.now()
+    fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime("%d/%m/%y")
     
     #validar que ya se puede iniciar la factura e inciarla
@@ -49,7 +49,7 @@ def generarFactura():
         
         while continuar == 1:
               
-            productos_elegidos = input("Ingrese el codigo del producto que desea: ")
+            productos_elegidos = int(input("Ingrese el codigo del producto que desea: "))
             producto_encontrado = buscar_datos_jason("productos.json", "codigo", productos_elegidos)
             
             if producto_encontrado:
@@ -66,11 +66,17 @@ def generarFactura():
             else:
                 print("Producto no encontrado")
                 
-            print("¿Desea agregar otro producto?")
-            print("1. SI")
-            print("2. NO")
-            continuar = int(input("Ingrese la opcion: "))
-            
+            while (True):
+                
+                print("¿Desea agregar otro producto?")
+                print("1. SI")
+                print("2. NO")
+                continuar = int(input("Ingrese la opcion: "))
+                
+                if continuar == 1 or continuar == 2:
+                    break
+                else:
+                    print("Opcion invalida")
 
         if continuar == 2:
             #se genera la factura
@@ -129,6 +135,24 @@ def generarfactura(mesa, cliente, fecha, productos):
     print("2. No")
     guardar_factura = int(input("Ingrese una opción: "))
     
+    total_a_paga_txt = 0
+    subtotal_bruto = 0
+    subtotal_iva = 0
+    total_productos = 0
+    
+    for codigo, info_producto in productos.items():
+        cantidad = info_producto["Cantidad"]
+        valor_unidad = int(info_producto["Valor Unitario"])
+        iva = int(info_producto["Iva"])
+        
+        subtotal_item = (valor_unidad + iva) * cantidad
+        
+        
+        total_a_paga_txt += subtotal_item
+        subtotal_bruto += valor_unidad * cantidad
+        subtotal_iva += iva * cantidad
+        total_productos += cantidad
+    
     if guardar_factura == 1:
         
         nombre_archivo = f"Factura para {cliente["Nombre"]}.txt"
@@ -139,14 +163,12 @@ def generarfactura(mesa, cliente, fecha, productos):
             factura.write("FACTURA DE VENTA \n")
             factura.write(decoracion + "\n")
             factura.write(f"Fecha : {fecha}\n")
-            factura.write(f"Cliente : {cliente['Nombre']} Nº {cliente['Identificaion']}\n")
-            factura.write(f"Numero de contacto : {cliente['Telefono']}")
-            factura.write(f"Email : {cliente['Email']}")
+            factura.write(f"Cliente : {cliente['Nombre']} Nº {cliente['Identificacion']}\n")
+            factura.write(f"Numero de contacto : {cliente['Telefono']}\n")
+            factura.write(f"Email : {cliente['Email']}\n")
             factura.write(f"Mesa : {mesa['Nombre']} Nº {mesa['Codigo']}\n")
             factura.write(decoracion + "\n")
             factura.write("PRODUCTOS\n")
-            
-            total_a_paga_txt = 0
             
             for codigo, info_producto in productos.items():
         
@@ -154,15 +176,57 @@ def generarfactura(mesa, cliente, fecha, productos):
                 
                 factura.write(f"{info_producto["Nombre"]} : {info_producto["Cantidad"]} unidades \n valor unitario : {info_producto["Valor Unitario"]}\n Iva : {info_producto["Iva"]} \n Total = {subtotal}\n")
                 
-                total_a_paga_txt += 0
                 
             factura.write(f"Total a pagar = {total_a_paga_txt}")
             factura.write(decoracion + "\n")
+            generar_archivo_para_reporte(mesa["Codigo"], total_productos, subtotal_bruto, subtotal_iva, total_a_paga_txt, fecha, imprimio=True)
         
     if guardar_factura == 2:
         #Imprimir subtotal de nuevo
         print("Ok haz elegido no guardar la factura")
         print(f"El total a pagar es: {total_a_pagar}")
+        
+        generar_archivo_para_reporte(mesa["Codigo"], total_productos, subtotal_bruto, subtotal_iva, total_a_paga_txt, fecha, imprimio=False)
+    
+    
+    
+def generar_archivo_para_reporte(mesa, total_productos, subtotal_bruto, subtotal_iva, subtotal, fecha, imprimio):
+    
+    print(decoracion)
+    
+    
+    imprimido_o_no = ""
+    
+    if imprimio:
+        imprimido_o_no = "Se guardo la factura"
+    else:
+        imprimido_o_no = "No se guardo la factura"
+    
+    molde_reporte = {
+        "fecha" : fecha,
+        "mesa" : mesa,
+        "imprimio" : imprimido_o_no,
+        "total productos" : total_productos,
+        "subtotal_bruto" : subtotal_bruto,
+        "subtotal_iva" : subtotal_iva,
+        "subtotal" : subtotal,
+    }
+    
+    try:
+        with open("respaldo_reporte.json", "r") as clientes:
+                lista_datos = json.load(clientes)
+    except (FileNotFoundError, json.JSONDecodeError):
+        lista_datos = []
+    
+    
+    lista_datos.append(molde_reporte)
+    
+    with open("respaldo_reporte.json", "w") as archivo:
+        
+        json.dump(lista_datos, archivo)
+            
+    
+    print(decoracion)
     
     
     
