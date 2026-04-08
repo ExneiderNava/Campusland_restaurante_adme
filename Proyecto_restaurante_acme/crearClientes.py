@@ -11,18 +11,29 @@ def crearClientes():
         telefono = input("Ingrese el numero de telefono: ")
         email = input("Ingrese el Email: ")
         
+    
+        datos_cliente = {
+            "Identificacion" : identificaion,
+            "Nombre" : nombre,
+            "Telefono" : telefono,
+            "Email" : email
+        }
+        
+        try:
+            with open("Clientes.json", "r") as clientes:
+                lista_clientes = json.load(clientes)
+        except (FileNotFoundError, json.JSONDecodeError):
+            lista_clientes = []
+            
+        lista_clientes.append(datos_cliente)
+        
+        with open("Clientes.json", "w") as archivo:
+            json.dump(lista_clientes, archivo)
+            
+        print("Cliente guardado exitosamente")
+        
     except ValueError:
         print("Ingrese un dato valido")
         
-    datos_cliente = {
-        "Identificacion" : identificaion,
-        "Nombre" : nombre,
-        "Telefono" : telefono,
-        "Email" : email
-    }
-    
-    with open("Clientes.json", "w") as archivo:
-        json.dump(datos_cliente, archivo)
-    
         
     print(decoracion)

@@ -8,7 +8,8 @@ def generarFactura():
     print(decoracion)
     
     #Ya tenemos los datos de la mesa
-    codigo_mesa = int(input("Ingrese el codigo de la mesa a atender: "))
+    
+    codigo_mesa = input("Ingrese el codigo de la mesa a atender: ")
     datos_mesa = buscar_datos_jason("Mesas.json", "Codigo", codigo_mesa)
     
     if not datos_mesa:
