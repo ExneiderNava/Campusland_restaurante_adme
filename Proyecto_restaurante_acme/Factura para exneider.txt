@@ -1,0 +1,15 @@
+==================================================
+FACTURA DE VENTA 
+==================================================
+Fecha : 08/04/26
+Cliente : exneider Nº 1090527809
+Numero de contacto : 3167221636
+Email : exneidernava9@gmail.com
+Mesa : mesa regular Nº 1
+==================================================
+PRODUCTOS
+Galletas : 5 unidades 
+ valor unitario : 2500
+ Iva : 500 
+ Total = 15000
+Total a pagar = 15000==================================================

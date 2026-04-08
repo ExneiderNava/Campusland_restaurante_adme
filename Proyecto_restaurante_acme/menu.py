@@ -46,7 +46,8 @@ def menu():
                     case _:
                         print("Opcion invalida")
                         
-            except Exception:
+            except Exception as e:
                 print("A ocurrrido un error :(")
+                print(f"{type(e).__name__} - {e}")
             
     
