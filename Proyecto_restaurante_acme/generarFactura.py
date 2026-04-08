@@ -184,7 +184,7 @@ def generarfactura(mesa, cliente, fecha, productos):
                 factura.write(f"{info_producto["Nombre"]} : {info_producto["Cantidad"]} unidades \n valor unitario : {info_producto["Valor Unitario"]}\n Iva : {info_producto["Iva"]} \n Total = {subtotal}\n")
                 
                 
-            factura.write(f"Total a pagar = {total_a_paga_txt}")
+            factura.write(f"Total a pagar = {total_a_paga_txt}\n")
             factura.write(decoracion + "\n")
             generar_archivo_para_reporte(mesa["Codigo"], total_productos, subtotal_bruto, subtotal_iva, total_a_paga_txt, fecha, imprimio=True)
         
