@@ -15,7 +15,12 @@ def generarFactura():
         
         #mejorar la visualisacion
         
-        print(json.dumps(datos, indent=4))
+        for mesa in datos:
+            codigo = mesa.get("Codigo", "N/A")
+            nombre = mesa.get("Nombre", "N/A")
+            puestos = mesa.get("Puestos", "0")
+            
+            print(f"Mesa: {codigo} con {puestos} puesto -> {nombre}" )
     
     codigo_mesa = int(input("Ingrese el codigo de la mesa a atender: "))
         
@@ -231,7 +236,7 @@ def generar_archivo_para_reporte(mesa, total_productos, subtotal_bruto, subtotal
     
     with open("respaldo_reporte.json", "w") as archivo:
         
-        json.dump(lista_datos, archivo)
+        json.dump(lista_datos, archivo, indent=4)
             
     
     print(decoracion)
