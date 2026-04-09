@@ -13,6 +13,8 @@ def generarFactura():
     with open("Mesas.json" , "r") as mesas:
         datos = json.load(mesas)
         
+        #mejorar la visualisacion
+        
         print(json.dumps(datos, indent=4))
     
     codigo_mesa = int(input("Ingrese el codigo de la mesa a atender: "))
@@ -24,7 +26,6 @@ def generarFactura():
         print("No se puede inciar facturación")
         return
     
-    #Ya tenemos los datos del cliente
     id_cliente = int(input("Ingrese el numero de documento del cliente: "))
     datos_cliente = buscar_datos_jason("Clientes.json", "Identificacion", id_cliente)
     
@@ -39,7 +40,7 @@ def generarFactura():
     fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime("%d/%m/%y")
     
-    #validar que ya se puede iniciar la factura e inciarla
+    
     if datos_mesa and datos_cliente:
         print(f"Generando factura para {datos_cliente["Nombre"]} con la mesa {datos_mesa["Nombre"]}")
         print("Lista de productos")
